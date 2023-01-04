@@ -1,31 +1,38 @@
 package main
 
 import (
-	"bufio"
+	"flag"
 	"fmt"
-	"os"
+	"strconv"
+	"strings"
 )
 
-// readInput возвращает срез слов после считывания строки
-// и разделения строки на слова
-func readInput() ([]string, error) {
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Split(bufio.ScanWords)
-	var words []string
-	for scanner.Scan() {
-		words = append(words, scanner.Text())
+// readInput reads source string
+// from command line arguments and returns them.
+func readInput() (src string) {
+	flag.Parse()
+	src = strings.Join(flag.Args(), "")
+	return src
+}
+
+func wordsCount(words []string) int {
+	var i int
+	for _, v := range words {
+		if v == "" {
+			continue
+		}
+		i++
 	}
-	return words, nil
+	return i
 }
 
 func main() {
+	var cnt int
 	var words []string
-	var err error
+	src := readInput()
+	words = strings.Split(src, " ")
 
-	words, err = readInput()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(len(words))
-	}
+	cnt = wordsCount(words)
+
+	fmt.Println(strconv.Itoa(cnt))
 }
